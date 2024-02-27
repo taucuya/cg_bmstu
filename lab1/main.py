@@ -102,50 +102,46 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.tableWidget.setItem(len(mas) - 1, 1, QtWidgets.QTableWidgetItem(f"{mas[-1][1]:.2f}"))
     def delDot(self):
         try:
-            x = float(self.lineEdit.text())
-            y = float(self.lineEdit_2.text())
+            ind = int(self.lineEdit_coords.text())
         except Exception:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Ошибка')
-            msg.setText("Неправильно введены координаты.")
+            msg.setText("Неправильно введен номер точки из таблицы.")
             msg.exec()
-            self.lineEdit.setText('')
-            self.lineEdit_2.setText('')
+            self.lineEdit_coords.setText('')
         else:
-            ind = -100
-            for j in range(len(mas) - 1):
-                print(self.tableWidget, self.tableWidget.item(j, 1))
-                if self.tableWidget.item(j, 0) == x and self.tableWidget.item(j, 0) == y:
-                    ind = j
-            print(ind)
-            for i in range(ind, len(mas) - 1):
-                self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(f"{mas[i + 1][0]:.2f}"))
-                self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(f"{mas[i + 1][1]:.2f}"))
-            mas.pop(ind)
-            self.tableWidget.setItem(len(mas), 0, QtWidgets.QTableWidgetItem(''))
-            self.tableWidget.setItem(len(mas), 1, QtWidgets.QTableWidgetItem(''))
-            self.lineEdit.setText('')
-            self.lineEdit_2.setText('')
-            self.scatter.clear()
-            for i in mas:
-                self.scatter.addPoints([str(i[0])], [str(i[1])])
-            if ind == -100:
+            if ind < 1 or ind > len(mas):
                 msg = QtWidgets.QMessageBox()
                 msg.setWindowTitle('Ошибка')
-                msg.setText("Такой точки нет.")
+                msg.setText("Неправильно введен номер точки из таблицы.")
                 msg.exec()
+                self.lineEdit_coords.setText('')
+            else:
+                for i in range(ind - 1, len(mas) - 1):
+                    self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(f"{mas[i + 1][0]:.2f}"))
+                    self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(f"{mas[i + 1][1]:.2f}"))
+                mas.pop(ind - 1)
+                self.tableWidget.setItem(len(mas), 0, QtWidgets.QTableWidgetItem(''))
+                self.tableWidget.setItem(len(mas), 1, QtWidgets.QTableWidgetItem(''))
                 self.lineEdit.setText('')
                 self.lineEdit_2.setText('')
+                self.scatter.clear()
+                for i in mas:
+                    self.scatter.addPoints([str(i[0])], [str(i[1])])
+                self.lineEdit_coords.setText('')
 
     def delAll(self):
+        global FLAG
         for i in range(len(mas)):
             self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(''))
             self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(''))
         del mas[:]
         self.scatter.setData()
-        self.plot_widget.removeItem(self.tr)
-        self.plot_widget.removeItem(self.bis)
-        self.plot_widget.removeItem(self.height)
+        if FLAG:
+            self.plot_widget.removeItem(self.tr)
+            self.plot_widget.removeItem(self.bis)
+            self.plot_widget.removeItem(self.height)
+        FLAG = 0
 
     def result(self):
         global FLAG
