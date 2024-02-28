@@ -133,6 +133,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def result(self):
         global FLAG
+        triangle = []
         if FLAG == 1:
             self.plot_widget.removeItem(self.tr)
             self.plot_widget.removeItem(self.bis)
