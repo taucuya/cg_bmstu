@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QWidget, QMessageBox
-from PyQt6.QtGui import QPainterPath, QPainter, QColor, QPen, QTransform, QPolygonF
+from PyQt6.QtGui import QPainterPath, QPainter, QColor, QPen, QTransform, QPolygonF, QVector2D
 from PyQt6.QtCore import QPointF, QRectF
 from math import cos, sin, radians, pi
 
@@ -10,7 +10,6 @@ class BirdWidget(QWidget):
         self.scale_x = 1.0
         self.scale_y = 1.0
         self.angle = 0
-        self.rotation_point = QPointF(0, 0)
         self.body = [QPointF(0, 0), QPointF(0, 40), QPointF(-60, 0)]
         self.head = [QPointF(-60, 40), QPointF(-60, 60), QPointF(-80, 40)]
         self.nose = [QPointF(-70, 45), QPointF(-100, 35), QPointF(-70, 35), QPointF(-70, 45)]
@@ -41,8 +40,9 @@ class BirdWidget(QWidget):
         self.update()
 
     def angleAll(self, point: QPointF, angle: float) -> None:
-        self.angle = angle
-        self.rotation_point = point
+        self.angle += angle
+        self.body = updateAnglePoint(self.body, point, angle)
+        self.head = updateAnglePoint(self.head, point, angle)
         self.nose = updateAnglePoint(self.nose, point, angle)
         self.wing = updateAnglePoint(self.wing, point, angle)
         self.tail = updateAnglePoint(self.tail, point, angle)
@@ -54,13 +54,13 @@ class BirdWidget(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         body_path = QPainterPath()
-        points = find_ellipse_points(self.body, self.angle, self.rotation_point)
+        points = find_ellipse_points(self.body, self.angle)
         body_path.moveTo(points[0])
         for point in points[1:]:
             body_path.lineTo(point)
 
         head_path = QPainterPath()
-        points = find_ellipse_points(self.head, self.angle, self.rotation_point)
+        points = find_ellipse_points(self.head, self.angle)
         head_path.moveTo(points[0])
         for point in points[1:]:
             head_path.lineTo(point)
@@ -95,7 +95,6 @@ class BirdWidget(QWidget):
         self.scale_x = 1.0
         self.scale_y = 1.0
         self.angle = 0
-        self.rotation_point = QPointF(0, 0)
         self.body = [QPointF(0, 0), QPointF(0, 40), QPointF(-60, 0)]
         self.head = [QPointF(-60, 40), QPointF(-60, 60), QPointF(-80, 40)]
         self.nose = [QPointF(-70, 45), QPointF(-100, 35), QPointF(-70, 35), QPointF(-70, 45)]
@@ -125,7 +124,6 @@ def plusPoint(part: list[QPointF], point: QPointF) -> list[QPointF]:
 
 def rotate_point(point: QPointF, point_center: QPointF, angle_degrees: float) -> QPointF:
     angle_radians = radians(angle_degrees)
-
     cos_theta = cos(angle_radians)
     sin_theta = sin(angle_radians)
     point -= point_center
@@ -133,13 +131,14 @@ def rotate_point(point: QPointF, point_center: QPointF, angle_degrees: float) ->
     new_y = point.x() * sin_theta + point.y() * cos_theta + point_center.y()
     return QPointF(new_x, new_y)
 
-def find_ellipse_points(part: list[QPointF], angle: float, center: QPointF, num_points: int = 1000) -> list[QPointF]:
-    b = abs((part[1] - part[0]).y())
-    a = abs((part[2] - part[0]).x())
+def find_ellipse_points(part: list[QPointF], angle: float, num_points: int = 1000) -> list[QPointF]:
+    a = QVector2D(part[2] - part[0]).length()
+    b = QVector2D(part[1] - part[0]).length()
     points = []
+
     for i in range(num_points):
         t = 2 * pi * i / num_points
         x = part[0].x() + a * cos(t)
         y = part[0].y() + b * sin(t)
-        points.append(rotate_point(QPointF(x, y), center, angle))
+        points.append(rotate_point(QPointF(x, y), part[0], angle))
     return points
