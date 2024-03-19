@@ -4,6 +4,7 @@ from design import *
 EPSILON = 1e-5
 FLAG = 0
 
+
 def show_msg(str):
     msg = QtWidgets.QMessageBox()
     msg.setWindowTitle('Ошибка')
@@ -32,6 +33,8 @@ def get_arrays_for_drawing(triangle):
 
 # Функция принимает точку пересечения биссектрисы и стороны и точки вершин треугольников и возвращает массивы
 # для отрисовки для данного случая
+
+
 def get_arrays(a, A, B, C):
     xb = [A.x(), a.x()]
     yb = [A.y(), a.y()]
@@ -42,6 +45,8 @@ def get_arrays(a, A, B, C):
 
 # Функция принимает индекс максимального угла, трегольник в вершинах и 3 вектора для биссектрис и возвращает массивы
 # для построения высоты и биссектрисы
+
+
 def formBisHeight(mx_ind, triangle, a, b, c):
     if mx_ind == 2:
         xb, yb, xh, yh = get_arrays(c, triangle[2], triangle[0], triangle[1])
@@ -51,6 +56,7 @@ def formBisHeight(mx_ind, triangle, a, b, c):
         xb, yb, xh, yh = get_arrays(b, triangle[1], triangle[2], triangle[0])
 
     return xb, yb, xh, yh
+
 
 class Window(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -76,7 +82,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         if len(mas) > 100:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Ошибка')
-            msg.setText("Нельзя ввести больше 100 точек.")
+            msg.setText('Нельзя ввести больше 100 точек.')
             msg.exec()
             self.lineEdit.setText('')
             self.lineEdit_2.setText('')
@@ -84,22 +90,24 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             pos = self.plot_widget.plotItem.vb.mapSceneToView(event.scenePos())
             x = pos.x()
             y = pos.y()
-            self.scatter.addPoints([f"{x}"], [f"{y}"])
+            self.scatter.addPoints([f'{x}'], [f'{y}'])
             mas.append([x, y])
-            self.tableWidget.setItem(len(mas) - 1, 0, QtWidgets.QTableWidgetItem(f"{mas[-1][0]:.2f}"))
-            self.tableWidget.setItem(len(mas) - 1, 1, QtWidgets.QTableWidgetItem(f"{mas[-1][1]:.2f}"))
+            self.tableWidget.setItem(
+                len(mas) - 1, 0, QtWidgets.QTableWidgetItem(f'{mas[-1][0]:.2f}'))
+            self.tableWidget.setItem(
+                len(mas) - 1, 1, QtWidgets.QTableWidgetItem(f'{mas[-1][1]:.2f}'))
 
     def show_message_box_author(self):
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('Об авторе')
-        msg.setText("Шатохина Таисия Павловна ИУ7-41Б")
+        msg.setText('Шатохина Таисия Павловна ИУ7-41Б')
         msg.exec()
 
     def show_message_box_prog(self):
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('О программе')
-        msg.setText("Программа решает задачу поиска треугольника, у которого угол"
-                    " между биссектросой и высотой, выходящих из одной вершины максимален.")
+        msg.setText('Программа решает задачу поиска треугольника, у которого угол'
+                    ' между биссектросой и высотой, выходящих из одной вершины максимален.')
         msg.exec()
 
     def addDot(self):
@@ -110,7 +118,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.plot_widget.removeItem(self.height)
             FLAG = 0
         if len(mas) > 100:
-            show_msg("Нельзя ввести больше 100 точек.")
+            show_msg('Нельзя ввести больше 100 точек.')
             self.lineEdit.setText('')
             self.lineEdit_2.setText('')
         else:
@@ -118,12 +126,12 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                 x = float(self.lineEdit.text())
                 y = float(self.lineEdit_2.text())
             except Exception:
-                show_msg("Неправильно введены координаты.")
+                show_msg('Неправильно введены координаты.')
                 self.lineEdit.setText('')
                 self.lineEdit_2.setText('')
             else:
                 if ([x, y] in mas):
-                    show_msg("Такая точка уже есть.")
+                    show_msg('Такая точка уже есть.')
                     self.lineEdit.setText('')
                     self.lineEdit_2.setText('')
                 else:
@@ -131,31 +139,38 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.scatter.addPoints([str(x)], [str(y)])
                     self.lineEdit.setText('')
                     self.lineEdit_2.setText('')
-                    self.tableWidget.setItem(len(mas) - 1, 0, QtWidgets.QTableWidgetItem(f"{mas[-1][0]:.2f}"))
-                    self.tableWidget.setItem(len(mas) - 1, 1, QtWidgets.QTableWidgetItem(f"{mas[-1][1]:.2f}"))
+                    self.tableWidget.setItem(
+                        len(mas) - 1, 0, QtWidgets.QTableWidgetItem(f'{mas[-1][0]:.2f}'))
+                    self.tableWidget.setItem(
+                        len(mas) - 1, 1, QtWidgets.QTableWidgetItem(f'{mas[-1][1]:.2f}'))
+
     def delDot(self):
         try:
             ind = int(self.lineEdit_coords.text())
         except Exception:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Ошибка')
-            msg.setText("Неправильно введен номер точки из таблицы.")
+            msg.setText('Неправильно введен номер точки из таблицы.')
             msg.exec()
             self.lineEdit_coords.setText('')
         else:
             if ind < 1 or ind > len(mas):
                 msg = QtWidgets.QMessageBox()
                 msg.setWindowTitle('Ошибка')
-                msg.setText("Неправильно введен номер точки из таблицы.")
+                msg.setText('Неправильно введен номер точки из таблицы.')
                 msg.exec()
                 self.lineEdit_coords.setText('')
             else:
                 for i in range(ind - 1, len(mas) - 1):
-                    self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(f"{mas[i + 1][0]:.2f}"))
-                    self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(f"{mas[i + 1][1]:.2f}"))
+                    self.tableWidget.setItem(
+                        i, 0, QtWidgets.QTableWidgetItem(f'{mas[i + 1][0]:.2f}'))
+                    self.tableWidget.setItem(
+                        i, 1, QtWidgets.QTableWidgetItem(f'{mas[i + 1][1]:.2f}'))
                 mas.pop(ind - 1)
-                self.tableWidget.setItem(len(mas), 0, QtWidgets.QTableWidgetItem(''))
-                self.tableWidget.setItem(len(mas), 1, QtWidgets.QTableWidgetItem(''))
+                self.tableWidget.setItem(
+                    len(mas), 0, QtWidgets.QTableWidgetItem(''))
+                self.tableWidget.setItem(
+                    len(mas), 1, QtWidgets.QTableWidgetItem(''))
                 self.lineEdit.setText('')
                 self.lineEdit_2.setText('')
                 self.scatter.clear()
@@ -185,11 +200,11 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.plot_widget.removeItem(self.height)
             FLAG = 0
         if len(mas) < 3:
-            show_msg("Недостаточно точек для решения задачи.")
+            show_msg('Недостаточно точек для решения задачи.')
         else:
             triangle = find_triangles(mas)
         if len(triangle) == 0:
-            show_msg("Невозможно создать треугольник.")
+            show_msg('Невозможно создать треугольник.')
         else:
             x_arr, y_arr, xb, yb, xh, yh = get_arrays_for_drawing(triangle)
             self.tr = self.plot_widget.plot(x_arr, y_arr, pen='b')
@@ -199,7 +214,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             FLAG = 1
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
     mas = []
     app = QtWidgets.QApplication(sys.argv)

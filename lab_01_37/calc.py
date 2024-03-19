@@ -5,6 +5,8 @@ EPSILON = 1e-5
 
 # Функция для вычисления координат точки пересечения двух прямых по их уравнениям
 # Получает коэфициенты a, b, c для уравнений прямых и возвращает точку перес ечения этих прямых
+
+
 def get_intersection_point(a1: float, b1: float, c1: float, a2: float, b2: float, c2: float) -> QtCore.QPointF:
     if a1 * b2 - a2 * b1 == 0:
         return None
@@ -28,6 +30,8 @@ def height_side_intersection(A: QtCore.QPointF, B: QtCore.QPointF, C: QtCore.QPo
     return get_intersection_point(a, b, c, a1, b1, c1)
 
 # Получает 2 точки треугольника и длины прилежаших к ним сторон, возвращает биссектриссу в векторном виде
+
+
 def getVector(point1: QtCore.QPointF, point2: QtCore.QPointF, a: float, b: float) -> QtGui.QVector2D:
     x = (a * point1.x() + b * point2.x()) / (a + b)
     y = (a * point1.y() + b * point2.y()) / (a + b)
@@ -35,6 +39,8 @@ def getVector(point1: QtCore.QPointF, point2: QtCore.QPointF, a: float, b: float
     return QtGui.QVector2D(x, y)
 
 # Получает треугольник в координатах, возвращает три биссектриссы в векторном виде
+
+
 def bisector_side(triangle: QtGui.QPolygonF) -> tuple:
     ab = QtGui.QVector2D(triangle[0] - triangle[1])
     bc = QtGui.QVector2D(triangle[2] - triangle[1])
@@ -51,6 +57,8 @@ def bisector_side(triangle: QtGui.QPolygonF) -> tuple:
 
 # Принимает три угла треугольника, возвращает углы между биссектриссой и высотой для треугольника с тупым или прямым
 # углом
+
+
 def get_angles_for_obtuse_or_right(alpha: float, beta: float, gamma: float) -> tuple:
     theta_a = (alpha / 2) - 90 + max(beta, gamma)
     theta_b = alpha - 90 + (beta / 2)
@@ -58,6 +66,8 @@ def get_angles_for_obtuse_or_right(alpha: float, beta: float, gamma: float) -> t
     return theta_a, theta_b, theta_c
 
 # Принимает три угла треугольника, возвращает углы между биссектриссой и высотой для треугольника, где все углы острые
+
+
 def get_angle_for_acute(alpha: float, beta: float, gamma: float) -> tuple:
     theta_a = (alpha / 2) - 90 + max(beta, gamma)
     theta_b = (beta / 2) - 90 + max(alpha, gamma)
@@ -69,14 +79,18 @@ def get_angle_for_acute(alpha: float, beta: float, gamma: float) -> tuple:
 # угла треугольника
 def calculate_angles_between_bisectors_and_heights(alpha: float, beta: float, gamma: float) -> tuple:
     if alpha >= 90 - EPSILON:
-        theta_a, theta_b, theta_c = get_angles_for_obtuse_or_right(alpha, beta, gamma)
+        theta_a, theta_b, theta_c = get_angles_for_obtuse_or_right(
+            alpha, beta, gamma)
     elif beta >= 90 - EPSILON:
-        theta_b, theta_a, theta_c = get_angles_for_obtuse_or_right(beta, alpha, gamma)
+        theta_b, theta_a, theta_c = get_angles_for_obtuse_or_right(
+            beta, alpha, gamma)
     elif gamma >= 90 - EPSILON:
-        theta_c, theta_a, theta_b = get_angles_for_obtuse_or_right(gamma, alpha, beta)
+        theta_c, theta_a, theta_b = get_angles_for_obtuse_or_right(
+            gamma, alpha, beta)
     else:
         theta_a, theta_b, theta_c = get_angle_for_acute(gamma, alpha, beta)
     return theta_a, theta_b, theta_c
+
 
 def check_for_math_err(alpha: float) -> float:
     if alpha > 1:
@@ -86,6 +100,8 @@ def check_for_math_err(alpha: float) -> float:
     return alpha
 
 # Функция принимает треугольник в координатых вершин и возвращает углы треугольника
+
+
 def get_triangle_angles(triangle: QtGui.QPolygonF) -> tuple:
     ab = QtGui.QVector2D(triangle[0] - triangle[1])
     bc = QtGui.QVector2D(triangle[2] - triangle[1])
@@ -114,6 +130,8 @@ def get_triangle_angles(triangle: QtGui.QPolygonF) -> tuple:
     return alpha, betta, gamma
 
 # Функция принимает массив всех точек на координатном поле и формирует массив с уникальными треугольниками
+
+
 def find_triangles(mas: list) -> list:
     triangle = []
     for i in range(len(mas) - 2):
@@ -121,22 +139,27 @@ def find_triangles(mas: list) -> list:
             for k in range(j + 1, len(mas)):
                 if isTriangle(mas[i], mas[j], mas[k]):
                     polygon = QtGui.QPolygonF([QtCore.QPointF(mas[i][0], mas[i][1]), QtCore.QPointF(mas[j][0], mas[j][1]),
-                                          QtCore.QPointF(mas[k][0], mas[k][1])])
+                                               QtCore.QPointF(mas[k][0], mas[k][1])])
                     triangle.append(polygon)
     return triangle
 
 # Функция проверяет вырожденность треугольника
+
+
 def isTriangle(A, B, C):
     return (B[0] - A[0]) * (C[1] - A[1]) - (B[1] - A[1]) * (C[0] - A[0]) != 0
 
 # Функция принимает массмв треугольников и возвращает индекс вершины из которой угол между биссектриссой и
 # высотой максимален и треугольник с максимальным таким углом
+
+
 def findMax(triangle: list) -> tuple:
     mx = 0
     res = [0, 0, 0]
     for i in range(len(triangle)):
         alpha, betta, gamma = get_triangle_angles(triangle[i])
-        n_a, n_b, n_c = calculate_angles_between_bisectors_and_heights(alpha, betta, gamma)
+        n_a, n_b, n_c = calculate_angles_between_bisectors_and_heights(
+            alpha, betta, gamma)
         if mx < (n_a + EPSILON) or mx < (n_b + EPSILON) or mx < (n_c + EPSILON):
             mx_ind = i
             res[0] = n_a
