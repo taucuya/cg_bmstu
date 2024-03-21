@@ -1,0 +1,39 @@
+run: main.py
+	@python3 main.py
+
+clean:
+	[ -d "out" ] & rm -rf ./out
+	[ -d "results" ] & rm -rf ./results
+	@find . -name '*.txt' ! -name '*old.txt' -exec rm -f {} \;
+
+release:
+	[ ! -d "out" ] & mkdir "out"
+	@find . -name '*.py' ! -name '*_tests.py' -exec cp {} ./out \;
+
+report-unittesting-latest.txt:
+	@pytest --cov-report term-missing --cov=. unit_tests.py > temp.txt
+	@awk '/^TOTAL/ {print}' temp.txt > new.txt
+	@./make_number.sh > report-unittesting-latest.txt
+	@rm -f new.txt
+	@rm -f temp.txt
+
+
+report-functesting-latest.txt:
+	if [ ! -d results ]; then \
+	    mkdir results; \
+	fi
+	@pytest --cov-report term-missing --cov=. func_tests.py > temp.txt
+	@awk '/^TOTAL/ {print}' temp.txt > new.txt
+	@./make_number.sh > report-functesting-latest.txt
+	@rm -f new.txt
+	@rm -f temp.txt
+	@cat buf.txt >> report-functesting-latest.txt
+
+format:
+	@pyformat --in-place *.py
+
+checkall:
+	@lizard . > lizard_report.txt
+
+saveolds:
+	@./saveolds.sh

@@ -1,0 +1,46 @@
+{
+    "test_1" : {
+        "x_mov" : "0", 
+        "y_mov" : "0", 
+        "size" : "1", 
+        "x_center_size" : "0", 
+        "y_center_size" : "0", 
+        "angle" : "0", 
+        "x_center_spin" : "0", 
+        "y_center_spin" : "0",
+        "description" : "Изображение находится в начальном состоянии."
+    },
+    "test_2" : {
+        "x_mov" : "22", 
+        "y_mov" : "22", 
+        "size" : "1", 
+        "x_center_size" : "0", 
+        "y_center_size" : "0", 
+        "angle" : "0", 
+        "x_center_spin" : "0", 
+        "y_center_spin" : "0",
+        "description" : "Изображение перемещено в точку (22, 22) относительно начального состояния."
+    },
+    "test_3" : {
+        "x_mov" : "0", 
+        "y_mov" : "0", 
+        "size" : "2", 
+        "x_center_size" : "-10", 
+        "y_center_size" : "-10", 
+        "angle" : "0", 
+        "x_center_spin" : "0", 
+        "y_center_spin" : "0",
+        "description" : "Изображение увеличено в 2 раза относительно начального состояния."
+    },
+    "test_4" : {
+        "x_mov" : "35", 
+        "y_mov" : "0", 
+        "size" : "2", 
+        "x_center_size" : "17", 
+        "y_center_size" : "0", 
+        "angle" : "34", 
+        "x_center_spin" : "10", 
+        "y_center_spin" : "10",
+        "description" : "Изображение перемещено в точку (35,0), увеличено в 2 раза относительно точки (17, 0) и повернуто на 34 градуса относительно точки (10, 10)."
+    }
+}
