@@ -18,10 +18,10 @@ def draw_specter(scene: QGraphicsScene, method, point_start: QPointF, point_end:
     for i in range(0, 361, int(angle)):
         pointsArray = method(point_start, point_end, color)
         draw_line(scene, pointsArray)
-        point_end = QPointF(cos(radians(i)) * length, sin(radians(i)) * length)
+        point_end = QPointF(round(cos(radians(i)) * length), round(sin(radians(i)) * length))
 
 
 def draw_standart_specter(scene: QGraphicsScene, point_start: QPointF, point_end: QPointF, length: float, angle: float, color: QColor):
     for i in range(0, 361, int(angle)):
         draw_standart(scene, point_start, point_end, color)
-        point_end = QPointF(cos(radians(i)) * length, sin(radians(i)) * length)
+        point_end = QPointF(round(cos(radians(i)) * length), round(sin(radians(i)) * length))

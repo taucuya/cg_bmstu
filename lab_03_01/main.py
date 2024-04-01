@@ -31,7 +31,6 @@ class Window(QMainWindow):
         self.canvas = QGraphicsView(self.scene, self)
         self.canvas.setGeometry(QRect(250, 10, 861, 731))
         self.canvas.setTransform(transform)
-
         self.button_author.clicked.connect(self.show_message_box_author)
         self.button_prog.clicked.connect(self.show_message_box_prog)
         self.lineDrawButton.clicked.connect(self.choose_line_algorithm)
