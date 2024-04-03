@@ -47,7 +47,7 @@ class Window(QMainWindow):
     def show_message_box_prog(self) -> None:
         msg = QMessageBox()
         msg.setWindowTitle('О программе')
-        msg.setText("Программа выполняет построение отрезков и спектров посредством различных алгоритмов.")
+        msg.setText("Программа выполняет построение отрезков и спектров посредством 6 различных алгоритмов.")
         msg.exec()  
     
     def choose_line_algorithm(self) -> None:
