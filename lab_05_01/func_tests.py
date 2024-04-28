@@ -29,6 +29,7 @@ def tests(qtbot, window):
             clkLine = 0
             string = ''
             for i in range(TestReps):
+                window.clear()
                 for j in data[test]["points"]:
                     window.addPoint(QPoint(j[0], j[1]))
                 window.colorComboBox.setCurrentIndex(int(data[test]["color_ind"]))
