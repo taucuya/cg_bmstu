@@ -58,7 +58,7 @@ def cohen_sutherland_clip(start_point, end_point, rect):
     else:
         return None
 
-def clip_segments(segments, rect):
+def solve7(segments, rect):
     rect = QRect(rect[0], rect[1])
     clipped_segments = []
     i = 0

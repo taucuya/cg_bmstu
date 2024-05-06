@@ -2,7 +2,9 @@ from PyQt6.QtCore import Qt, QPoint, QRectF, QPointF, QRect
 from PyQt6.QtWidgets import QApplication, QMainWindow, QGraphicsView, QGraphicsScene, QMessageBox, QTableWidgetItem
 from PyQt6.QtGui import QPen, QColor, QImage, QPixmap
 from PyQt6.uic import loadUi
-from solve_7 import clip_segments
+from solve_7 import solve7
+from solve_8 import solve8
+from solve_9 import solve9
 
 colors = dict(Красный = "#ff0000", Зеленый = "#00ff00", \
               Синий = "#0000ff", Желтый = "#ffb700", Черный = "#000000")
@@ -129,15 +131,35 @@ class Window(QMainWindow):
     def solution(self):
         if self.done:
             self.clear()
-            
+        type1 = types[self.cutterComboBox.currentText()]
+        type2 = types[self.cuttingComboBox.currentText()]
         pen = QPen()
         pen.setColor(QColor("#02d6f2"))
-        clipped_segments = clip_segments(self.pointCuttingArray, self.pointCutterArray)
-        if clipped_segments:
-            for clipped_segment in clipped_segments:
-                self.scene.addLine(clipped_segment[0].x(), clipped_segment[0].y(), \
-                                       clipped_segment[1].x(), clipped_segment[1].y(), pen)
+        if type1 == 4 and type2 == 2:
+            clipped_segments = solve7(self.pointCuttingArray, self.pointCutterArray)
+            if clipped_segments:
+                for clipped_segment in clipped_segments:
+                    self.scene.addLine(clipped_segment[0].x(), clipped_segment[0].y(), \
+                                        clipped_segment[1].x(), clipped_segment[1].y(), pen)
+        if type1 == 6 and type2 == 2:
+            clipped_segments = solve8(self.pointCuttingArray, self.pointCutterArray)
+            if clipped_segments:
+                for clipped_segment in clipped_segments:
+                    self.scene.addLine(clipped_segment[0].x(), clipped_segment[0].y(), \
+                                        clipped_segment[1].x(), clipped_segment[1].y(), pen)
+                    
+        if type1 == 6 and type2 == 6:
+            clipped_segments = solve9(self.pointCuttingArray, self.pointCutterArray)
+            if clipped_segments:
+                i = 0
+                while i < len(clipped_segments) - 1:
+                    self.scene.addLine(clipped_segments[i].x(), clipped_segments[i].y(), \
+                                        clipped_segments[i + 1].x(), clipped_segments[i + 1].y(), pen)
+                    i += 2
         self.done = True
+
+
+
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
