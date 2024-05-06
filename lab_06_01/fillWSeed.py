@@ -36,7 +36,7 @@ def drawPoint(scene, point, color):
     scene.addLine(point.x(), point.y(), point.x(), point.y(), pen)
 
 
-def filling(scene, color, pointArray, flag, image, seed):
+def filling(scene, color, pointArray, flag, seed):
     
     if not point_inside_polygon(seed, pointArray):
         return 123

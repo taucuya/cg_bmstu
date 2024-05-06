@@ -85,7 +85,7 @@ class Window(QMainWindow):
             self.clear()
             return
         color = self.colorComboBox.currentText()
-        if filling(self.scene, colors[color], self.pointArray, flag, self.image, self.seed) == 123:
+        if filling(self.scene, colors[color], self.pointArray, flag, self.seed) == 123:
             show_msg("Некорректно введена точка затравки")
 
 if __name__ == "__main__":
