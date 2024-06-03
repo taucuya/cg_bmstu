@@ -1,0 +1,14 @@
+{
+    "test_1" : {
+        "start_x" : -5,
+        "end_x" : 5,
+        "step_x" : 0.1,
+        "start_z" : -5,
+        "end_z" : 5,
+        "step_z" : 0.1,
+        "funcInd" : 0,
+        "colorInd" : 0,
+        "type_cutting" : 0,
+        "description" : "sin(x) ** 2 + cos(z) ** 2."
+    }
+}
